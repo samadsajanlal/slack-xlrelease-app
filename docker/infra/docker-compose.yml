@@ -1,0 +1,50 @@
+version: '3.5'
+
+services:
+    consul:
+        container_name: consul
+        image: consul:latest
+        volumes:
+            - ./config:/config
+            - ./data/consul:/data
+        command: agent -server -data-dir=/data -bind 0.0.0.0 -client 0.0.0.0 -bootstrap-expect=1
+        networks:
+            - slack-backend-network
+
+    vault:
+        container_name: vault
+        image: vault
+        depends_on:
+            - consul
+        volumes:
+            - ./config:/config
+            - ./data/consul:/data
+        cap_add:
+            - IPC_LOCK
+        command: server -config=/config/vault.hcl
+        networks:
+            - slack-backend-network
+
+    backup:
+        container_name: backup
+        build: backup/
+        volumes:
+            - ./data/backup:/backup/
+        command: consul-backup
+        networks:
+            - slack-backend-network
+
+    redis:
+        container_name: redis
+        image: bitnami/redis:latest
+        environment:
+            - ALLOW_EMPTY_PASSWORD=yes
+        volumes:
+            - ./data/redis:/bitnami/redis/data
+        networks:
+            - slack-backend-network
+
+networks:
+    slack-backend-network:
+        external: false
+        name: slack-backend-network

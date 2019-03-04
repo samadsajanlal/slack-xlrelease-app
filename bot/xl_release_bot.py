@@ -26,8 +26,8 @@ class XLReleaseBot(object):
                       "state": ""}
         self.verification = os.environ.get("SIGNING_SECRET")
         self.slack_client = Client(access_token="", bot_token="")
-        self.db_client = DBClient()
-        self.vault_client = VaultClient(url='http://localhost:8200', token=os.environ.get("VAULT_TOKEN"))
+        self.db_client = DBClient(host=os.environ.get("REDIS_HOST"), port=os.environ.get("REDIS_PORT"))
+        self.vault_client = VaultClient(url=os.environ.get("VAULT_URL"), token=os.environ.get("VAULT_TOKEN"))
         self.release_channel_meta = {}
         self.xl_release_config = {}
         self.logger = logging.getLogger(__name__).setLevel(logging.DEBUG)

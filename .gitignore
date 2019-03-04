@@ -31,10 +31,9 @@ __pycache__
 instance/
 
 #data
-docker/data/*
+docker/infra/data/*
 
 #vscode
 .vscode
 .python-version
 
- 
