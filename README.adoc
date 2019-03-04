@@ -47,15 +47,15 @@ Now, we have to create slack app for XL Release.
 
 * Visit link:https://api.slack.com/apps[Slack Apps] and click on *Create New App*
 
-image::images/slack_apps_page.png[,600,600]
+image::images/slack_apps_page.png[]
 
 * Add app name as *XL Release* and choose your development slack workspace.
 
-image::images/create_new_app.png[,600,600]
+image::images/create_new_app.png[]
 
 * Once the new app is created, visit Basic information page and copy value of *Client ID*, *Client Secret*, and *Signing Secret* in `docker/app/.env` file. You can also customise icon for your Slack app from Display information page.
 
-image::images/basic_information.png[,600,600]
+image::images/basic_information.png[]
 
 ### Start Slack XL Release Bot
 
@@ -70,9 +70,9 @@ This will start slack bot on port 5000. However it is required to open tunnel to
 
 To do that, use link:https://ngrok.com[ngrok] or setup reverse proxy using nginx or apache.
 
-To use ngrok, run `ngrok http 5000` and copy the url which will be used to configure slack app.
+To use ngrok, run `ngrok http 5000` to open tunnel and copy the url which will be used to configure slack app.
 
-image::images/ngrok_example.png[,600,600]
+image::images/ngrok_example.png[]
 
 
 ### Configure features for your slack app
@@ -81,37 +81,37 @@ image::images/ngrok_example.png[,600,600]
 
 Click on *Bot Users* link from slack app configuration page and add username for your bot.
 
-image::images/bot_user.png[,600,600]
+image::images/bot_user.png[]
 
 #### Configure interactive components
 
 Click on *Interactive Components* link and add interactivity url.
 
-image::images/interactive_components.png[,600,600]
+image::images/interactive_components.png[]
 
 #### Add slash command
 
 Click on *Slash Commands* link and add new slash command as below.
 
-image::images/slash_command.png[,600,600]
-image::images/add_slash_command.png[,600,600]
+image::images/slash_command.png[]
+image::images/add_slash_command.png[]
 
 #### Add events
 
 Click on *Event Subscriptions* link and enable events. Add Request URL for events. Subscribe to _message.im_ event.
 
-image::images/event_subscription.png[,600,600]
+image::images/event_subscription.png[]
 
 #### Add scope and permissions
 
 Click on *OAuth & Permissions* link and add redirect url to thanks page. Also add scopes shown in below image.
 
-image::images/oauth_permission.png[,600,600]
+image::images/oauth_permission.png[]
 
 ### Install App in your workspace
 
 To add slack app to your slack workspace, open bot url in web browser and click on _Add to Slack_ button and authorize the changes.
 
-image::images/slack_bot_url.png[,600,600]
+image::images/slack_bot_url.png[]
 
 
