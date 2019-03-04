@@ -1,0 +1,40 @@
+.gradle/
+
+# Build output
+build/
+out/
+target/
+bin/
+Pipfile.lock
+
+# Eclipse
+.metadata/
+.settings/
+.classpath
+.project
+.pydevproject
+
+# IntelliJ
+.idea/*
+*.iml
+*.ipr
+*.iws
+*.log
+
+# Mac
+.DS_Store
+
+#cache
+__pycache__
+
+#local instance
+instance/
+
+#data
+docker/data/*
+
+#vscode
+.vscode
+.python-version
+
+ 
