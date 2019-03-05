@@ -1,9 +1,6 @@
 import json
-import logging
 import os
 import threading
-
-from bot import logger
 from bot.db.db_client import DBClient
 from bot.db.vault_client import VaultClient
 from bot.helper import get_random_string
@@ -12,6 +9,7 @@ from bot.helper.release_helper import ReleaseHelper
 from bot.helper.release_tracker import ReleaseTracker
 from bot.helper.task_helper import TaskHelper
 from bot.messages.show_help import get_help
+from bot.messages.slack_installed import get_slack_installed
 from bot.slack.client import Client
 
 
@@ -20,18 +18,30 @@ class XLReleaseBot(object):
 
     def __init__(self):
         super(XLReleaseBot, self).__init__()
-        self.oauth = {"client_id": os.environ.get("CLIENT_ID"),
-                      "client_secret": os.environ.get("CLIENT_SECRET"),
-                      "scope": "bot,commands,chat:write:bot,channels:write,users.profile:read,team:read",
-                      "state": ""}
+
+        client_id = os.environ.get("CLIENT_ID")
+        client_secret = os.environ.get("CLIENT_SECRET")
+        vault_token = os.environ.get("VAULT_TOKEN")
+        vault_url = os.environ.get("VAULT_URL")
+        redis_host = os.environ.get("REDIS_HOST")
+        redis_port = os.environ.get("REDIS_PORT")
+
+        self.polling_time = os.environ.get("POLLING_TIME")
         self.verification = os.environ.get("SIGNING_SECRET")
+
+        self.oauth = {
+            "client_id": client_id,
+            "client_secret": client_secret,
+            "scope": "bot,commands,chat:write:bot,channels:write,users.profile:read,team:read",
+            "state": ""
+        }
+
         self.slack_client = Client(access_token="", bot_token="")
-        self.db_client = DBClient(host=os.environ.get("REDIS_HOST"), port=os.environ.get("REDIS_PORT"))
-        self.vault_client = VaultClient(url=os.environ.get("VAULT_URL"), token=os.environ.get("VAULT_TOKEN"))
+        self.vault_client = VaultClient(url=vault_url, token=vault_token)
+        self.db_client = DBClient(host=redis_host, port=redis_port)
+
         self.release_channel_meta = {}
         self.xl_release_config = {}
-        self.logger = logging.getLogger(__name__).setLevel(logging.DEBUG)
-        self.polling_time = 2
 
     def new_state(self):
         self.oauth["state"] = get_random_string(string_length=30)
@@ -56,7 +66,7 @@ class XLReleaseBot(object):
         self.vault_client.set_secret(path="bot_token",
                                      secret=auth_response["bot"]["bot_access_token"])
 
-        # self.slack_client.post_message(channel=auth_response["user_id"], kwargs=get_slack_installed())
+        self.slack_client.post_message(channel=auth_response["user_id"], kwargs=get_slack_installed())
         return True
 
     def show_help(self, channel_id=None, user_id=None):

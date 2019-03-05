@@ -1,11 +1,14 @@
 import json
-
+import logging
 import jinja2
 from flask import Flask, render_template, request, make_response
 from slackeventsapi import SlackEventAdapter
 
-from bot import logger
+from bot import setup_logging
 from bot.xl_release_bot import XLReleaseBot
+
+setup_logging()
+logger = logging.getLogger(__name__)
 
 app = Flask(__name__, instance_relative_config=False)
 app.config.from_object('config')
@@ -50,6 +53,9 @@ def thanks():
 
 @app.route("/xlrelease", methods=["POST"])
 def xlrelease_command():
+    channel_id = request.form.get('channel_id')
+    user_id = request.form.get('user_id')
+
     message = request.form.get('text')
     if "connect" in message:
         xl_release_bot.handle_config_command(request_form=request.form)
@@ -58,8 +64,8 @@ def xlrelease_command():
     elif "track" in message:
         xl_release_bot.handle_track_release_command(request_form=request.form)
     else:
-        xl_release_bot.show_help(channel_id=request.form.get('channel_id'),
-                                 user_id=request.form.get('user_id'))
+        xl_release_bot.show_help(channel_id=channel_id,
+                                 user_id=user_id)
     return make_response("", 200)
 
 
@@ -91,7 +97,7 @@ def respond():
     elif "task-action:submit:" in callback_id:
         xl_release_bot.handle_task_action(request_form=request.form)
     else:
-        print("Slack Payload : {}".format(slack_payload))
+        logger.debug("Do not find matching callback id. Slack Payload : {}".format(slack_payload))
     return make_response("", 200)
 
 

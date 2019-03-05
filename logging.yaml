@@ -1,0 +1,81 @@
+---
+version: 1
+disable_existing_loggers: False
+formatters:
+  simple:
+    format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+
+handlers:
+  console:
+    class: logging.StreamHandler
+    level: DEBUG
+    formatter: simple
+    stream: ext://sys.stdout
+
+  log_file_handler:
+    class: logging.handlers.RotatingFileHandler
+    level: INFO
+    formatter: simple
+    filename: log/xl-release-bot.log
+    maxBytes: 10485760 # 10MB
+    backupCount: 20
+    encoding: utf8
+
+  audit_file_handler:
+    class: logging.handlers.RotatingFileHandler
+    level: INFO
+    formatter: simple
+    filename: log/audit.log
+    maxBytes: 10485760 # 10MB
+    backupCount: 20
+    encoding: utf8
+
+loggers:
+  audit:
+    level: INFO
+    handlers: [audit_file_handler]
+    propagate: no
+
+  bot:
+    level: INFO
+    handlers: [console, log_file_handler]
+    propagate: no
+
+  bot.db:
+    level: INFO
+    handlers: [console, log_file_handler]
+    propagate: no
+
+  bot.slack:
+    level: INFO
+    handlers: [console, log_file_handler]
+    propagate: no
+
+  bot.helper:
+    level: INFO
+    handlers: [console, log_file_handler]
+    propagate: no
+
+  bot.dialogs:
+    level: INFO
+    handlers: [console, log_file_handler]
+    propagate: no
+
+  bot.messages:
+    level: INFO
+    handlers: [console, log_file_handler]
+    propagate: no
+
+  bot.xlrelease:
+    level: INFO
+    handlers: [console, log_file_handler]
+    propagate: no
+
+  bot.exceptions:
+    level: INFO
+    handlers: [console, log_file_handler]
+    propagate: yes
+
+root:
+  level: INFO
+  handlers: [console, log_file_handler]

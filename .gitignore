@@ -5,6 +5,7 @@ build/
 out/
 target/
 bin/
+log/
 Pipfile.lock
 
 # Eclipse
@@ -33,6 +34,8 @@ instance/
 #data
 docker/infra/data/*
 docker/app/.env
+docker/infra/docker-compose-dev.yml
+docker/infra/logs
 
 #vscode
 .vscode
