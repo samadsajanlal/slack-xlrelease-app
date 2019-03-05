@@ -2,6 +2,7 @@ import json
 
 import polling
 import threading
+import logging
 
 from bot.helper import Helper, get_task_name
 from bot.messages.release_completed import get_release_completed_message
@@ -14,6 +15,7 @@ class ReleaseTracker(Helper):
 
     def __init__(self, slack_client=None, db_client=None, vault_client=None):
         super(ReleaseTracker, self).__init__(slack_client=slack_client, db_client=db_client, vault_client=vault_client)
+        self.logger = logging.getLogger(__name__)
 
     def show_releases(self, user_id=None, channel_id=None):
         """
@@ -87,16 +89,6 @@ class ReleaseTracker(Helper):
             self.__handle_known_active_tasks(channel=channel, xl_release=xl_release,
                                              release_data=release_data, all_user_config_meta=all_user_config_meta,
                                              base_url=base_url, known_active_tasks=known_active_tasks)
-            """
-            for key, value in known_active_tasks.items():
-                if value["status"] != "COMPLETED" or value["status"] != "SKIPPED":
-                    current_task = xl_release.get_task(key)
-                    if current_task["status"] == "COMPLETED" or current_task["status"] == "SKIPPED":
-                        self.__handle_task_messages(channel=channel, xl_release=xl_release,
-                                                    task=current_task, release_data=release_data,
-                                                    all_user_config_meta=all_user_config_meta,
-                                                    base_url=base_url, known_active_tasks=known_active_tasks)
-            """
 
             response = xl_release.get_active_tasks(release_id)
             if response.status_code == 200:
@@ -116,7 +108,7 @@ class ReleaseTracker(Helper):
             else:
                 return True
         except Exception as e:
-            print("Exception Occurred, {}".format(e))
+            self.logger.exception("Exception Occurred")
 
     def __handle_known_active_tasks(self, channel=None, xl_release=None, release_data=None,
                                     all_user_config_meta=None, base_url=None, known_active_tasks=None):
@@ -184,7 +176,6 @@ class ReleaseTracker(Helper):
             )
             all_user_config_meta = self.db_client.get_xl_release_config()
             known_active_tasks = self.db_client.get_release_task_meta(release_id=release_id)
-            print("Active Tasks : {}".format(known_active_tasks))
             self.__handle_known_active_tasks(channel=channel, xl_release=xl_release,
                                              release_data=release_data, all_user_config_meta=all_user_config_meta,
                                              base_url=base_url, known_active_tasks=known_active_tasks)

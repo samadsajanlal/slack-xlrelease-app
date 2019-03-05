@@ -1,6 +1,7 @@
 import json
 import os
 import threading
+import logging
 from bot.db.db_client import DBClient
 from bot.db.vault_client import VaultClient
 from bot.helper import get_random_string
@@ -8,7 +9,7 @@ from bot.helper.config_helper import ConfigHelper
 from bot.helper.release_helper import ReleaseHelper
 from bot.helper.release_tracker import ReleaseTracker
 from bot.helper.task_helper import TaskHelper
-from bot.messages.show_help import get_help
+from bot.messages.show_help import get_help, get_connect_help, get_general_error
 from bot.messages.slack_installed import get_slack_installed
 from bot.slack.client import Client
 
@@ -18,6 +19,7 @@ class XLReleaseBot(object):
 
     def __init__(self):
         super(XLReleaseBot, self).__init__()
+        self.logger = logging.getLogger(__name__)
 
         client_id = os.environ.get("CLIENT_ID")
         client_secret = os.environ.get("CLIENT_SECRET")
@@ -77,26 +79,34 @@ class XLReleaseBot(object):
         self.slack_client.post_ephemeral(channel=channel_id, user=user_id, kwargs=get_help())
 
     def handle_config_command(self, request_form=None):
-        trigger_id = request_form.get('trigger_id')
-        config_helper = ConfigHelper(slack_client=self.slack_client,
-                                     db_client=self.db_client,
-                                     vault_client=self.vault_client)
-        config_helper.show_config_dialog(trigger_id=trigger_id)
+        text = request_form.get('text')
+        command_input = text.split()
 
-    def handle_config_dialog_trigger(self, request_form=None):
-        payload = json.loads(request_form.get("payload"))
+        if len(command_input) != 4:
+            return self.slack_client.post_ephemeral(channel=request_form.get('channel_id'),
+                                                    user=request_form.get('user_id'),
+                                                    kwargs=get_connect_help())
+
+        xl_release_config = {
+            "slack_user_id": request_form.get('user_id'),
+            "xl_release_url": command_input[1],
+            "username": command_input[2]
+        }
         config_helper = ConfigHelper(slack_client=self.slack_client,
                                      db_client=self.db_client,
                                      vault_client=self.vault_client)
-        xl_release_config = {
-            "slack_user_id": payload["user"]["id"],
-            "xl_release_url": payload["submission"]["xl_release_url"],
-            "username": payload["submission"]["username"]
+        user = {
+            "id": request_form.get('user_id'),
+            "name": request_form.get('user_name')
         }
-        config_helper.add_configuration(user=payload["user"],
-                                        channel=payload["channel"],
+        channel = {
+            "id": request_form.get('channel_id'),
+            "name": request_form.get('channel_name'),
+        }
+        config_helper.add_configuration(user=user,
+                                        channel=channel,
                                         xl_release_config=xl_release_config,
-                                        secret=payload["submission"]["password"])
+                                        secret=command_input[3])
 
     def handle_create_release_command(self, request_form=None):
         user_id = request_form.get('user_id')
@@ -104,9 +114,14 @@ class XLReleaseBot(object):
         release_helper = ReleaseHelper(slack_client=self.slack_client,
                                        db_client=self.db_client,
                                        vault_client=self.vault_client)
-
-        release_helper.show_templates(user_id=user_id,
-                                      channel_id=channel_id)
+        try:
+            release_helper.show_templates(user_id=user_id,
+                                          channel_id=channel_id)
+        except Exception as e:
+            self.logger.exception("Can not retrieve templates.")
+            self.slack_client.post_ephemeral(channel=request_form.get('channel_id'),
+                                             user=request_form.get('user_id'),
+                                             kwargs=get_general_error())
 
     def handle_template_callback(self, request_form=None):
         payload = json.loads(request_form.get("payload"))
@@ -129,9 +144,14 @@ class XLReleaseBot(object):
         release_tracker = ReleaseTracker(slack_client=self.slack_client,
                                          db_client=self.db_client,
                                          vault_client=self.vault_client)
-
-        release_tracker.show_releases(user_id=user_id,
-                                      channel_id=channel_id)
+        try:
+            release_tracker.show_releases(user_id=user_id,
+                                          channel_id=channel_id)
+        except Exception as e:
+            self.logger.exception("Can not retrieve releases.")
+            self.slack_client.post_ephemeral(channel=request_form.get('channel_id'),
+                                             user=request_form.get('user_id'),
+                                             kwargs=get_general_error())
 
     def handle_release_create_callback(self, request_form=None):
         payload = json.loads(request_form.get("payload"))

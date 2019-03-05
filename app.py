@@ -86,8 +86,6 @@ def respond():
     callback_id = slack_payload["callback_id"]
     if callback_id == "create-release-dialog":
         xl_release_bot.handle_template_callback(request_form=request.form)
-    elif callback_id == "add-xl-release-configuration":
-        xl_release_bot.handle_config_dialog_trigger(request_form=request.form)
     elif callback_id == "track-release":
         xl_release_bot.handle_release_track_callback(request_form=request.form)
     elif callback_id == "create-release-submit":
