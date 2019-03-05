@@ -27,3 +27,6 @@ vault write -address=${VAULT_ADDR} auth/userpass/users/webui password=webui poli
 ## CREATE BACKUP TOKEN
 echo "[*] Create backup token..."
 vault token create -address=${VAULT_ADDR} -display-name="backup_token" | awk '/token/{i++}i==2' | awk '{print "backup_token: " $2}' >> ./data/keys.txt
+
+## SAVE TOKEN IN ENV
+sed -i "s/<VAULT_TOKEN>/$(grep 'Initial Root Token:' ./data/keys.txt | awk '{print substr($NF, 1, length($NF)-1)}')/g" ../.env

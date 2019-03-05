@@ -33,7 +33,7 @@ instance/
 
 #data
 docker/infra/data/*
-docker/app/.env
+docker/.env
 docker/infra/docker-compose-dev.yml
 docker/infra/logs
 

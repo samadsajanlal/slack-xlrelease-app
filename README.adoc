@@ -18,7 +18,7 @@ It is recommended that you setup https for vault server. To do that, configure T
 
 ### Vault, consul, and redis setup
 
-First change directory to `docker/infra/`.
+Change default `REDIS_PASSWORD` in `docker/.env` file. Now change directory to `docker/infra/`.
 
 ```
 cd docker/infra/
@@ -27,7 +27,7 @@ cd docker/infra/
 For initial setup, follow below steps.
 
 1. Start services: run `docker-compose up`
-1. Init Vault: run `./scripts/setup.sh` This will create keys.txt in `docker/data` directory. Make sure nobody has access to it. Store *Vault Token* value in `docker/app/.env` file.
+1. Init Vault: run `./scripts/setup.sh` This will create keys.txt in `docker/data` directory. Make sure nobody has access to it. Store *Vault Token* value in `docker/.env` file.
 
 For subsequent runs, follow below steps.
 
@@ -53,7 +53,7 @@ image::images/slack_apps_page.png[]
 
 image::images/create_new_app.png[]
 
-* Once the new app is created, visit Basic information page and copy value of *Client ID*, *Client Secret*, and *Signing Secret* in `docker/app/.env` file. You can also customise icon for your Slack app from Display information page.
+* Once the new app is created, visit Basic information page and copy value of *Client ID*, *Client Secret*, and *Signing Secret* in `docker/.env` file. You can also customise icon for your Slack app from Display information page.
 
 image::images/basic_information.png[]
 

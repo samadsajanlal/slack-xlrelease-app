@@ -10,15 +10,8 @@ services:
             - "5000:5000"
         volumes:
             - ../infra/data/logs/slack:/opt/xebialabs/slack-xlrelease-app/log
-        environment:
-            - CLIENT_ID=${CLIENT_ID}
-            - CLIENT_SECRET=${CLIENT_SECRET}
-            - SIGNING_SECRET=${SIGNING_SECRET}
-            - VAULT_TOKEN=${VAULT_TOKEN}
-            - VAULT_URL=${VAULT_URL}
-            - REDIS_HOST=${REDIS_HOST}
-            - REDIS_PORT=${REDIS_PORT}
-            - POLLING_TIME=${POLLING_TIME}
+        env_file:
+          - ../.env
         command: pipenv run gunicorn app:app -b 0.0.0.0:5000
         external_links:
             - redis:redis

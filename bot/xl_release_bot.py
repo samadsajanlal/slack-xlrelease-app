@@ -25,8 +25,9 @@ class XLReleaseBot(object):
         vault_url = os.environ.get("VAULT_URL")
         redis_host = os.environ.get("REDIS_HOST")
         redis_port = os.environ.get("REDIS_PORT")
+        redis_pass = os.environ.get("REDIS_PASSWORD")
 
-        self.polling_time = os.environ.get("POLLING_TIME")
+        self.polling_time = int(os.environ.get("POLLING_TIME"))
         self.verification = os.environ.get("SIGNING_SECRET")
 
         self.oauth = {
@@ -38,7 +39,7 @@ class XLReleaseBot(object):
 
         self.slack_client = Client(access_token="", bot_token="")
         self.vault_client = VaultClient(url=vault_url, token=vault_token)
-        self.db_client = DBClient(host=redis_host, port=redis_port)
+        self.db_client = DBClient(host=redis_host, port=redis_port, password=redis_pass)
 
         self.release_channel_meta = {}
         self.xl_release_config = {}

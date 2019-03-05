@@ -26,6 +26,7 @@ ENV CLIENT_ID="" \
     VAULT_URL=http://vault:8200 \
     REDIS_HOST=redis \
     REDIS_PORT=6379 \
+    REDIS_PASSWORD="" \
     POLLING_TIME=30
 
 CMD ["pipenv", "run", "gunicorn", "app:app", "-b", "0.0.0.0:5000"]
