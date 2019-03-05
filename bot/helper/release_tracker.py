@@ -107,7 +107,7 @@ class ReleaseTracker(Helper):
                     return True
             else:
                 return True
-        except Exception as e:
+        except Exception:
             self.logger.exception("Exception Occurred")
 
     def __handle_known_active_tasks(self, channel=None, xl_release=None, release_data=None,

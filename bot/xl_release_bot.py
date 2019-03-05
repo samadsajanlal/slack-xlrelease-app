@@ -147,7 +147,7 @@ class XLReleaseBot(object):
         try:
             release_tracker.show_releases(user_id=user_id,
                                           channel_id=channel_id)
-        except Exception as e:
+        except Exception:
             self.logger.exception("Can not retrieve releases.")
             self.slack_client.post_ephemeral(channel=request_form.get('channel_id'),
                                              user=request_form.get('user_id'),
