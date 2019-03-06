@@ -57,6 +57,12 @@ class DBClient(object):
         return self.redis_client.hmset(name="{}#{}".format(DBClient.RELEASE_TRACK_KEY, release_id),
                                        mapping=release_meta)
 
+    def get_complete_task_id(self, partial_task_id=None):
+        keys = self.redis_client.keys(pattern="{}#*/{}".format(DBClient.TASK_TRACK_KEY, partial_task_id))
+        for key in keys:
+            return key.split("{}#".format(DBClient.TASK_TRACK_KEY))[1]
+        pass
+
     def get_active_releases(self):
         keys = self.__get_release_meta_keys()
         releases = {}

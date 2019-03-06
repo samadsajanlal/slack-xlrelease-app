@@ -44,9 +44,11 @@ class TaskHelper(Helper):
         self.slack_client.open_dialog(trigger_id=trigger_id,
                                       dialog=dialog)
 
-    def task_action(self, user=None, task_id=None, action=None, comment=None):
-        xl_release = super(TaskHelper, self).get_xl_release(user_id=user["id"])
-        request_body = {
-            "comment": comment
-        }
-        xl_release.task_action(task_id, action, json.dumps(request_body))
+    def task_action(self, user=None, partial_task_id=None, action=None, comment=None):
+        task_id = self.db_client.get_complete_task_id(partial_task_id=partial_task_id)
+        if task_id:
+            xl_release = super(TaskHelper, self).get_xl_release(user_id=user["id"])
+            request_body = {
+                "comment": comment
+            }
+            xl_release.task_action(task_id, action, json.dumps(request_body))

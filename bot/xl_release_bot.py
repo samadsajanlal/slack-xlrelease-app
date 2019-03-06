@@ -215,7 +215,7 @@ class XLReleaseBot(object):
                                  db_client=self.db_client,
                                  vault_client=self.vault_client)
         task_helper.task_action(user=payload["user"],
-                                task_id=task_data[3],
+                                partial_task_id=task_data[3],
                                 action=task_data[2],
                                 comment=payload["submission"]["comment"])
 

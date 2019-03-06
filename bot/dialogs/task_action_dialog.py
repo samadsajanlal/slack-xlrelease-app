@@ -11,7 +11,7 @@ def get_task_action_dialog(task=None, action=None):
     dialog = {
         "title": task["title"] if len(task["title"]) < 24 else "{}...".format(task["title"][:20]),
         "submit_label": action.capitalize(),
-        "callback_id": "task-action:submit:{}:{}".format(action, task["id"]),
+        "callback_id": "task-action:submit:{}:{}".format(action, task["id"][task["id"].rfind("/")+1:]),
         "elements": elements
     }
 
