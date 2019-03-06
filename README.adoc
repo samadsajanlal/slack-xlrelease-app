@@ -38,7 +38,7 @@ To take backup, run `./scripts/backup.sh`
 
 To clean up everything, follow below steps.
 
-1. Stop services: run `docker-compose -f docker-compose-infra.yml down --volumes`
+1. Stop services: run `docker-compose down --volumes`
 1. Clear persisted data: run `./scripts/clean.sh`
 
 ### Create Slack App
