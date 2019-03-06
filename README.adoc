@@ -115,3 +115,50 @@ To add slack app to your slack workspace, open bot url in web browser and click 
 image::images/slack_bot_url.png[]
 
 
+# How to Use
+
+Once installed, you can see _XL Release_ in apps section.
+
+image::images/app_installed.png[]
+
+Below commands can be used with this app.
+
+`/xlrelease connect url username password`: Connect to XL Release i.e. `/xlrelease connect https://xlrelease.com admin admin`
+`/xlrelease create`: Create a new release from templates
+`/xlrelease track`: Track existing release
+
+### Connect to XL Release
+
+Each user has to configure their username and passwords to use this slack app. Don't worry, passwords are stored in Vault.
+
+Enter below command in XL Release App Channel (You can use any channel) to configure your user.
+
+`/xlrelease connect url username password`: Connect to XL Release i.e. `/xlrelease connect https://xlrelease.com admin admin`
+
+You will get message shown in below screenshot if connection is successful.
+
+image::images/connection_success.png[]
+
+### Create release from Slack
+
+Use `/xlrelease create` command to create a new release from Slack. You will get a list of templates (based on access rights) to choose from.
+
+image::images/template_list.png[]
+
+Select any template and enter name for your release. Release will be create and it will show task which are in progress.
+
+image::images/create_release_dialog.png[]
+
+image::images/release_tracking.png[]
+
+Note: _If release template requires other input variables, it will be shown with create release dialog. Right now only string type of variables are supported due to slack limitation._
+
+You can now assign task to your self, complete the task, fail the task, skip the task or retry the task. Not all type of task actions are supported yet. For Gate task, user can only assign or skip task.
+
+As release progresses, updated notifications are sent to slack channel.
+
+image::images/updated_tasks.png[]
+
+### Track release from Slack
+
+Use `/xlrelease track` command to track existing release. You will get a list of releases which are running (based on access rights) to choose from.
