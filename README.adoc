@@ -63,6 +63,7 @@ To start bot, execute below commands.
 
 ```
 cd docker/app/
+docker-compose build
 docker-compose up
 ```
 
