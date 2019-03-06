@@ -12,7 +12,7 @@ services:
             - ../infra/data/logs/slack:/opt/xebialabs/slack-xlrelease-app/log
         env_file:
           - ../.env
-        command: pipenv run gunicorn app:app -b 0.0.0.0:5000
+        command: pipenv run gunicorn app:app -b 0.0.0.0:5000 -w 3
         external_links:
             - redis:redis
             - vault:vault
