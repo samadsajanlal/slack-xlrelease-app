@@ -14,7 +14,7 @@ This slack app uses link:https://www.vaultproject.io/[Vault] backed by link:http
 
 You can use `docker/infra/docker-compose.yml` to spin up vault, consul, and redis.
 
-It is recommended that you setup https for vault server. To do that, configure TLS Certificate and key path in `docker/config/vault.hcl` and set `tls_disable = 0`
+It is recommended that you setup https for vault server. To do that, configure TLS Certificate and key path in `docker/infra/config/vault.hcl` and set `tls_disable = 0`
 
 ### Vault, consul, and redis setup
 
