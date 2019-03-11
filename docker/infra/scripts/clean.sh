@@ -11,8 +11,8 @@ case ${answer:0:1} in
 		rm -rf ./data/redis/
 		echo "[+] Removing: ./data/keys.txt"
 		rm -f ./data/keys.txt
-		echo "[+] Removing: ./data/logs/"
-		rm -f ./data/logs/
+		echo "[+] Removing: ./logs/"
+		rm -rf ./logs/
     ;;
     * )
         echo "[*] Aborting..."

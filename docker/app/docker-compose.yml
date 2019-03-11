@@ -9,7 +9,7 @@ services:
         ports:
             - "5000:5000"
         volumes:
-            - ../infra/data/logs/slack:/opt/xebialabs/slack-xlrelease-app/log
+            - ../infra/logs/slack:/opt/xebialabs/slack-xlrelease-app/log
         env_file:
           - ../.env
         command: pipenv run gunicorn app:app -b 0.0.0.0:5000 -w 3
