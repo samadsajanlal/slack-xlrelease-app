@@ -1,3 +1,4 @@
+#!/bin/bash -i
 
 read -p "[?] Are you sure you want to remove all Vault's data (y/n)? " answer
 case ${answer:0:1} in

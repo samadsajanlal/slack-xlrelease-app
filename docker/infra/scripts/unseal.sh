@@ -1,3 +1,5 @@
+#!/bin/bash -i
+
 ## CONFIG LOCAL ENV
 echo "[*] Config local environment..."
 alias vault='docker-compose exec vault vault "$@"'
