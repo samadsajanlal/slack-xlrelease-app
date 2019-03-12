@@ -24,7 +24,9 @@ def get_task_messages(release_title=None, task=None, task_type=None, all_user_co
     if "comments" in task and task["comments"]:
         append_comments = "\n*Comments ({})*\n".format(len(task["comments"]))
         for comment in task["comments"]:
-            append_comments = "{}*Added by : {}*\n{}\n\n".format(append_comments, comment["author"], comment["text"])
+            append_comments = "{}*Added by : {}*\n{}\n\n".format(append_comments,
+                                                                 comment["author"] if "author" in comment else "",
+                                                                 comment["text"])
         attachment_text += append_comments
 
     temp_task_id = task["id"][task["id"].find('Phase'):].replace("/", "-")
