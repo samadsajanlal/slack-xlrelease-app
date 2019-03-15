@@ -29,10 +29,6 @@ docker-push : docker-build
 	docker push xebialabsunsupported/slack-xlrelease-app:$(VERSION)
 	docker push xebialabsunsupported/slack-xlrelease-app:latest
 
-#docker-run : docker-build
-# It runs on random port
-#	docker-compose
-
 release-tag :
 	@[ -n "${NEW_VERSION}" ] || (echo "set NEW_VERSION to the version you want to release, e.g. 1.0.1" && false)
 	@git diff-files --quiet --ignore-submodules -- > /tmp/log 2>&1 || (\

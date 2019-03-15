@@ -26,6 +26,7 @@ Pipfile.lock
 .DS_Store
 
 #cache
+*.pyc
 __pycache__
 
 #local instance
@@ -40,4 +41,6 @@ docker/infra/logs
 #vscode
 .vscode
 .python-version
+
+bot/version.txt
 
