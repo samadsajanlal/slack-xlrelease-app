@@ -1,8 +1,8 @@
-#!/bin/bash -i
+#!/bin/sh -i
 
 ## CONFIG LOCAL ENV
 echo "[*] Config local environment..."
-alias vault='docker-compose exec vault vault "$@"'
+alias vault='docker-compose -f docker-compose-infra.yml exec vault vault "$@"'
 export VAULT_ADDR=http://127.0.0.1:8200
 
 ## INIT VAULT
@@ -31,4 +31,4 @@ echo "[*] Create backup token..."
 vault token create -address=${VAULT_ADDR} -display-name="backup_token" | awk '/token/{i++}i==2' | awk '{print "backup_token: " $2}' >> ./data/keys.txt
 
 ## SAVE TOKEN IN ENV
-sed -i '' -e "s/<VAULT_TOKEN>/$(grep 'Initial Root Token:' ./data/keys.txt | awk '{print substr($NF, 1, length($NF)-1)}')/g" ../.env
+sed -i '' -e "s/<VAULT_TOKEN>/$(grep 'Initial Root Token:' ./data/keys.txt | awk '{print substr($NF, 1, length($NF)-1)}')/g" .env

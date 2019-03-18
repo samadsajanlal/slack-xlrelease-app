@@ -1,8 +1,8 @@
-#!/bin/bash -i
+#!/bin/sh -i
 
 ## CONFIG LOCAL ENV
 echo "[*] Config local environment..."
-alias vault='docker-compose exec vault vault "$@"'
+alias vault='docker-compose -f docker-compose-infra.yml exec vault vault "$@"'
 export VAULT_ADDR=http://127.0.0.1:8200
 
 ## UNSEAL VAULT

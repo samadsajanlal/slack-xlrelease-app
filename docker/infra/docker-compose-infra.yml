@@ -1,0 +1,39 @@
+version: '3.5'
+
+services:
+  consul:
+    container_name: consul
+    image: bitnami/consul:latest
+    volumes:
+      - ${DATA_DIR}/consul:/bitnami
+    networks:
+      - slack-backend-network
+
+  vault:
+    container_name: vault
+    image: vault:latest
+    depends_on:
+      - consul
+    volumes:
+      - ./config:/config
+      - ${DATA_DIR}/consul:/data
+    cap_add:
+      - IPC_LOCK
+    command: server -config=/config/vault.hcl
+    networks:
+      - slack-backend-network
+
+  redis:
+    container_name: redis
+    image: bitnami/redis:latest
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+    volumes:
+      - ${DATA_DIR}/redis:/bitnami/redis/data
+    networks:
+      - slack-backend-network
+
+networks:
+  slack-backend-network:
+    external: false
+    name: slack-backend-network

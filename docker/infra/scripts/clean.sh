@@ -1,4 +1,4 @@
-#!/bin/bash -i
+#!/bin/sh -i
 
 read -p "[?] Are you sure you want to remove all Vault's data (y/n)? " answer
 case ${answer:0:1} in
@@ -6,8 +6,6 @@ case ${answer:0:1} in
         echo "[*] Removing files..."
         echo "[+] Removing: ./data/consul/"
         rm -rf ./data/consul/
-        echo "[+] Removing: ./data/backup/"
-		rm -rf ./data/backup/
         echo "[+] Removing: ./data/redis/"
 		rm -rf ./data/redis/
 		echo "[+] Removing: ./data/keys.txt"
