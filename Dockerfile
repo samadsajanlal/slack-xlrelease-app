@@ -2,6 +2,7 @@ FROM python:3.7.2-alpine
 
 ENV APP_ROOT=/opt/xebialabs
 ENV APP_HOME=${APP_ROOT}/slack-xlrelease-app
+ENV MULTIDICT_NO_EXTENSIONS=1
 
 # Copy bot resources
 COPY bot/ ${APP_HOME}/bot/
@@ -12,6 +13,8 @@ COPY app.py config.py Pipfile logging.yaml ${APP_HOME}/
 WORKDIR ${APP_HOME}
 
 RUN mkdir log
+
+RUN apk --update add --no-cache gcc musl-dev linux-headers
 
 RUN pip install pipenv && \
     pipenv install

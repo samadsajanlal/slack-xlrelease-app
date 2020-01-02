@@ -1,11 +1,11 @@
-from slackclient import SlackClient
+from slack import WebClient
 
 
 class Client(object):
 
     def __init__(self, access_token=None, bot_token=None):
-        self.user_client = SlackClient(token=access_token)
-        self.bot_client = SlackClient(token=bot_token)
+        self.user_client = WebClient(token=access_token)
+        self.bot_client = WebClient(token=bot_token)
 
     def open_dialog(self, trigger_id=None, dialog=None):
         return self.bot_client.api_call(
